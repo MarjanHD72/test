@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1 v-text="sitename"></h1>
+      <figure>
+        <img v-bind:src="product.image" width="300" />
+      </figure>
+      <h2 v-text="product.title"></h2>
+      <p v-text="product.description"></p>
+      <p>Price: £{{ product.price }}</p>
+      <p>Spaces: {{ product.availableInventory }}</p>
+      <button
+        @click="addToCart(product)"
+        :disabled="product.availableInventory === 0"
+      >
+        Add to cart
+      </button>
+      <p>{{CertItemCount}}</p>
+    </div>
+
+    <script type="module">
+      const { createApp } = Vue;
+      const petstore = createApp({
+        data() {
+          return {
+            sitename: "Vue.js Pet Depot",
+            product: {
+              id: 1001,
+              title: "Cat Food, 25lb bag",
+              description:
+                "A 25 pound bag of irresistible," +
+                "organic goodness for your cat.",
+              price: 2000,
+              image: "images/catFood.jpg",
+              availableInventory: 5,
+              availableStore: true,
+            },
+            
+            cart: [],
+          };
+        },
+        computed: {
+          CertItemCount: function () {
+            return this.cart.length;
+          },
+        },
+        methods: {
+          addToCart(product) {
+            if (product.availableInventory > 0) {
+              product.availableInventory -= 1;
+              this.cart.push(product);
+            }
+          },
+        },
+      });
+      petstore.mount("#app");
+    </script>
+  </body>
+</html>
